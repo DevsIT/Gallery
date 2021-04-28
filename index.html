@@ -1,0 +1,113 @@
+<div class="page-width">
+  <div class="grid">
+    <div class="grid__item medium-up--five-sixths medium-up--push-one-twelfth">
+      <div class="section-header text-center">
+        <h1>{{ page.title }}</h1>
+      </div>
+
+      <div class="rte">
+        {{ page.content }}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+{{ 'gallery.css' | asset_url | stylesheet_tag }}
+
+{%- if section.blocks.size > 0 -%}
+<div class="page-width page-content">
+  <div class="grid page-gallery">
+
+    {%- for block in section.blocks -%}
+    <div {{ block.shopify_attributes }} class="grid__item medium-up--one-quarter">
+
+      <div class="pimg">
+        <a data-fancybox="gallery" class="image-popup-vertical-fit" 
+           href="{{ block.settings.popup_image | img_url: "master" | split:"?" | first }}">
+          <img src="{{ block.settings.image | img_url: "master" | split:"?" | first }}" 
+               alt="{{ block.settings.image.alt | escape }}">
+        </a>
+      </div>
+    </div>
+    {%- endfor -%}
+
+  </div>
+</div>
+{%- endif -%}
+
+
+
+<style>
+  .grid.page-gallery {
+    display: flex;
+    flex-wrap: wrap;
+  }
+</style>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>
+<script src="{{ 'gallery.js' | asset_url }}" defer="defer"></script>
+
+
+<script>
+  jQuery(document).ready(function() {
+
+    $('[data-fancybox]').fancybox({
+      toolbar  : true
+    });
+
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+{% schema %}
+  {
+    "name": "Image",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "page_title_enable",
+        "label": "Show page title"
+      },
+      {
+        "type": "checkbox",
+        "id": "page_content_enable",
+        "label": "Show page content"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Image",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+			"info": "500x500"
+          },
+          {
+            "type": "image_picker",
+            "id": "popup_image",
+            "label": "Portfolio Pop-up Image",
+            "info": "Any Size"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
